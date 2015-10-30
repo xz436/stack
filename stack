@@ -1,0 +1,91 @@
+1.min stack
+主要是要实现几个功能：push, pop, min
+其中pop的结果就是要取最上面的值，这也就为什么我们要keep一个stack，然后minstack的作用就是来弄最小值的
+push的时候看stack是否是empty的，如果是直接放，不是min那就要讨论放num 还是原来min中的peek
+
+pop要两个stack一起pop，当然return的是stack的pop值
+然后min肯定是pop minStack
+public class MinStack {
+    
+    public MinStack() {
+        // do initialize if necessary
+        // Stack<Integer> stack = new Stack<Integer>();
+        // Stack<Integer> minStack = new Stack<Integer>();
+    }
+    Stack<Integer> stack = new Stack<Integer>();
+        Stack<Integer> minStack = new Stack<Integer>();
+
+    public void push(int number) {
+        // write your code here
+        if(stack.isEmpty()){
+            stack.push(number);
+            minStack.push(number);
+        }
+        else{
+            if(number <= minStack.peek()){
+                minStack.push(number);
+            }
+            else{
+                minStack.push(minStack.peek());
+            }
+            stack.push(number);
+        }
+    }
+
+    public int pop() {
+        // write your code here
+        
+        minStack.pop();
+        return stack.pop();
+    }
+
+    public int min() {
+        // write your code here
+        return minStack.peek();
+    }
+}
+
+2. implement queue by two stacks
+考虑queue的特点先进先出，所以得用另外一个stack来把所有的stack1中的元素倒过来
+即stack2为空的时候把stack1的元素全都放过来，然后stack2不为空，直接pop就行
+public class Queue {
+    private Stack<Integer> stack1;
+    private Stack<Integer> stack2;
+
+    public Queue() {
+       // do initialization if necessary
+       stack1 = new Stack<Integer>();
+       stack2 = new Stack<Integer>();
+    }
+    
+    public void push(int element) {
+        // write your code here
+        stack1.push(element);
+    }
+
+    public int pop() {
+        // write your code here
+        //if we dont have anything in stack2, we transfer all things from stack1 to stack2, so element who comes first to the stack will become the last in stack2, then we can pop easily
+        //if stack2 not empty, then directly pop
+        if(stack2.isEmpty()){
+            while(!stack1.isEmpty()){
+                stack2.push(stack1.peek());
+                stack1.pop();
+            }
+        }
+        return stack2.pop();
+    }
+
+    public int top() {
+        // write your code here
+        //find the first element, dont need to remove
+        if(stack2.isEmpty()){
+            while(!stack1.isEmpty()){
+                stack2.push(stack1.peek());
+                stack1.pop();
+            }
+        }
+        return stack2.peek();
+    }
+}
+
